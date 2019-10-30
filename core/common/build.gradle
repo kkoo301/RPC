@@ -1,0 +1,13 @@
+plugins {
+    id 'java-library'
+}
+dependencies {
+    api project(':core:exception')
+    api rootProject.ext.dependencies["guava"]
+    api rootProject.ext.dependencies["fastjson"]
+    api rootProject.ext.dependencies["commons-collections4"]
+    api rootProject.ext.dependencies["commons-lang3"]
+
+    testImplementation rootProject.ext.dependencies['junit']
+    testCompileOnly rootProject.ext.dependencies['lombok']
+}

@@ -1,0 +1,15 @@
+# Project exclude paths
+/.idea/
+/.gradle/
+/core/api/build/
+/core/api/build/classes/java/main/
+/core/common/build/
+/core/common/build/classes/java/main/
+/core/common/build/classes/java/test/
+/core/exception/build/
+/core/exception/build/classes/java/main/
+/core-impl/log/build/
+/core-impl/log/build/classes/java/main/
+/extension-impl/extension-common/build/
+/extension-impl/extension-common/build/classes/java/main/
+/extension-impl/extension-common/build/classes/java/test/

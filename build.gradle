@@ -1,0 +1,18 @@
+apply from: 'dependencyDefinitions.gradle'
+
+allprojects{
+    group 'com.asia'
+    version '1.0'
+
+    pluginManager.apply "java"
+    pluginManager.apply "idea"
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+        mavenLocal()
+        mavenCentral()
+    }
+}

@@ -1,0 +1,15 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+
+    api project(':core:api')
+    api project(':core-impl:log')
+    //implementation rootProject.ext.dependencies["netty"]
+
+    testImplementation rootProject.ext.dependencies['junit']
+    testImplementation rootProject.ext.dependencies["slf4j-log4j12"]
+
+
+}

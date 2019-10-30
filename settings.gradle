@@ -1,0 +1,10 @@
+rootProject.name = 'RPC'
+
+include 'core:api'
+include 'core:common'
+include 'core:exception'
+
+include 'core-impl:client'
+include 'core-impl:log'
+
+include 'extension-impl:extension-common'

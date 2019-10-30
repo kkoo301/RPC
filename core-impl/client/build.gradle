@@ -1,0 +1,10 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+
+    implementation rootProject.ext.dependencies["netty"]
+
+
+}

@@ -1,0 +1,9 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    api project(':core:api')
+    implementation rootProject.ext.dependencies["slf4j-api"]
+
+}
