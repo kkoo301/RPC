@@ -39,12 +39,6 @@ public class RpcConfigs {
         }
     }
 
-    public static void putValue(String key, Object newValue) {
-        if (null != CFG.get(key)) {
-            CFG.put(key, newValue);
-        }
-    }
-
     public static String getStringValue(String key) {
         String value = MapUtils.getString(CFG, key);
         if (null == value) {
@@ -74,6 +68,10 @@ public class RpcConfigs {
 
     public static boolean getBooleanValue(String key) {
         return Boolean.parseBoolean(getStringValue(key));
+    }
+
+    public static byte getByteValue(String key) {
+        return Byte.parseByte(getStringValue(key));
     }
 
 }
