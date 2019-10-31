@@ -1,6 +1,8 @@
 package com.alipay.sofa.rpc.config;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 public final class ProviderConfig<T> extends AbstractInterfaceConfig<T, ProviderConfig<T>> implements Serializable {
@@ -10,6 +12,8 @@ public final class ProviderConfig<T> extends AbstractInterfaceConfig<T, Provider
     private String bootstrap = "";
 
     private ExecutorService executorService;
+
+    private List<ServerConfig> server;
 
 
     public String getBootstrap() {
@@ -28,5 +32,22 @@ public final class ProviderConfig<T> extends AbstractInterfaceConfig<T, Provider
     public ProviderConfig setExecutorService(ExecutorService executorService) {
         this.executorService = executorService;
         return castThis();
+    }
+
+    public List<ServerConfig> getServer() {
+        return server;
+    }
+
+    public ProviderConfig<T> setServer(List<ServerConfig> server) {
+        this.server = server;
+        return this;
+    }
+
+    public ProviderConfig<T> setServer(ServerConfig serverConfig){
+        if( null == this.server){
+            this.server = new ArrayList<>();
+        }
+        server.add(serverConfig);
+        return this;
     }
 }
