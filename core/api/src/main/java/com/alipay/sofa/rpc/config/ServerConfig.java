@@ -1,6 +1,8 @@
 package com.alipay.sofa.rpc.config;
 
 import com.alipay.sofa.rpc.common.RpcConfigs;
+import com.alipay.sofa.rpc.server.Server;
+import com.alipay.sofa.rpc.server.ServerFactory;
 
 import java.io.Serializable;
 
@@ -23,5 +25,9 @@ public class ServerConfig<T> extends AbstractInterfaceConfig<T, ProviderConfig<T
 
     public int getPort() {
         return port;
+    }
+
+    public Server buildIfAbsent(){
+        return ServerFactory.getServer(this);
     }
 }
