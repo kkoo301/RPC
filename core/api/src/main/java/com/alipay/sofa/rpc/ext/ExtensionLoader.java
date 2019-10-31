@@ -84,7 +84,7 @@ public class ExtensionLoader<T> {
             LOGGER.debug("Loading extension of extensible {} from path: {}", interfaceName, path);
         }
 
-        String file = StringUtils.isBlank(extensible.file()) ? path : extensible.file().trim();
+        String file = StringUtils.isBlank(extensible.file()) ? interfaceName : extensible.file().trim();
         String fullFileName = path + file + SUFFIX;
 
         try {
