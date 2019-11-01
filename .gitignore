@@ -13,3 +13,6 @@
 /extension-impl/extension-common/build/
 /extension-impl/extension-common/build/classes/java/main/
 /extension-impl/extension-common/build/classes/java/test/
+/extension-impl/remoting/build/
+/extension-impl/remoting/build/classes/java/main/
+/extension-impl/remoting/build/classes/java/test/
