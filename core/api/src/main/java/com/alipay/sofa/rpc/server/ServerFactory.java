@@ -1,6 +1,12 @@
 package com.alipay.sofa.rpc.server;
 
+import com.alipay.sofa.rpc.common.RpcConfigs;
+import com.alipay.sofa.rpc.common.RpcOptions;
+import com.alipay.sofa.rpc.common.SystemInfo;
+import com.alipay.sofa.rpc.common.utils.NetUtils;
+import com.alipay.sofa.rpc.common.utils.StringUtils;
 import com.alipay.sofa.rpc.config.ServerConfig;
+import com.alipay.sofa.rpc.ext.ExtensionLoader;
 import com.alipay.sofa.rpc.ext.ExtensionLoaderFactory;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
@@ -23,11 +29,42 @@ public final class ServerFactory {
         int port = serverConfig.getPort();
         Server server = SERVER_CACHE.getIfPresent(port);
         if (null == server) {
-            server = ExtensionLoaderFactory.getExtensionLoader(Server.class).getExtension(serverConfig.getProtocol());
+            resolveServerConfig(serverConfig);
+            ExtensionLoader<Server> extensionLoader = ExtensionLoaderFactory.getExtensionLoader(Server.class);
+            if (null == extensionLoader) {
+                throw new IllegalArgumentException("server.protocol:" + serverConfig.getProtocol() + " Unsupported protocol of server!");
+            }
+            server = extensionLoader.getExtension(serverConfig.getProtocol());
             server.init(serverConfig);
             SERVER_CACHE.put(serverConfig.getPort(), server);
         }
         return server;
+    }
+
+    private static void resolveServerConfig(ServerConfig serverConfig) {
+        String boundHost = serverConfig.getBoundHost();
+        if (StringUtils.isBlank(boundHost)) {
+            String host = serverConfig.getHost();
+            if (StringUtils.isBlank(host)) {
+                host = SystemInfo.getLocalHost();
+                serverConfig.setHost(host);
+                boundHost = SystemInfo.isWindows() ? host : NetUtils.ANYHOST;
+            } else {
+                boundHost = host;
+            }
+            serverConfig.setBoundHost(boundHost);
+        }
+
+        if (serverConfig.isAdaptivePort()) {
+            int oriPort = serverConfig.getPort();
+            int port = NetUtils.getAvailablePort(boundHost, oriPort, RpcConfigs.getIntValue(RpcOptions.SERVER_PORT_END));
+            if (port != oriPort) {
+                if (LOGGER.isWarnEnabled()) {
+                    LOGGER.warn("Changed port from {} to {} because the config port is disabled", oriPort, port);
+                }
+                serverConfig.setPort(port);
+            }
+        }
     }
 
     public static List<Server> getAllServers() {

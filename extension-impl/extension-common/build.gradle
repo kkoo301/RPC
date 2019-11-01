@@ -6,6 +6,7 @@ dependencies {
 
     api project(':core:api')
     api project(':core-impl:log')
+    api project(':extension-impl:remoting')
     //implementation rootProject.ext.dependencies["netty"]
 
     testImplementation rootProject.ext.dependencies['junit']

@@ -22,7 +22,10 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
 
         List<ServerConfig> serverConfigList = getProviderConfig().getServer();
         for(ServerConfig serverConfig : serverConfigList){
-            Server server = ServerFactory.getServer(serverConfig);
+            Server server = serverConfig.buildIfAbsent();
+
+            //Server server = ServerFactory.getServer(serverConfig);
+
             server.registerProcessor(getProviderConfig(),providerProxyInvoker);
             server.start();
         }

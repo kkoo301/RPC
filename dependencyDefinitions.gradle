@@ -7,7 +7,7 @@ ext {
             "lombok"                : "org.projectlombok:lombok:1.18.8",
             "junit"                 : "junit:junit:4.12",
             "netty"                 : "io.netty:netty-all:${dependVersion.nettyVersion}",
-            "guava"                 : "com.google.guava:guava:18.0",
+            "guava"                 : "com.google.guava:guava:19.0",
             "fastjson"              : "com.alibaba:fastjson:1.2.62",
             "commons-collections4"  : "org.apache.commons:commons-collections4:4.4",
             "commons-lang3"         : "org.apache.commons:commons-lang3:3.9",
