@@ -5,7 +5,6 @@ import com.alipay.sofa.rpc.config.ServerConfig;
 import com.alipay.sofa.rpc.ext.Extension;
 import com.alipay.sofa.rpc.server.ProviderProxyInvoker;
 import com.alipay.sofa.rpc.server.Server;
-import com.alipay.sofa.rpc.server.ServerFactory;
 
 import java.util.List;
 
