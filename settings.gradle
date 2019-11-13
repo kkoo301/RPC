@@ -8,4 +8,5 @@ include 'core-impl:client'
 include 'core-impl:log'
 
 include 'extension-impl:extension-common'
-include 'extension-impl:remoting'
+include 'extension-impl:netty-remoting'
+include 'extension-impl:registry-zk'

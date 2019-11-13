@@ -3,15 +3,12 @@ plugins {
 }
 
 dependencies {
-
     api project(':core:api')
     api project(':core-impl:log')
-    api project(':extension-impl:netty-remoting')
-    api project(':extension-impl:registry-zk')
-    //implementation rootProject.ext.dependencies["netty"]
+
+    implementation rootProject.ext.dependencies["curator-framework"]
 
     testImplementation rootProject.ext.dependencies['junit']
     testImplementation rootProject.ext.dependencies["slf4j-log4j12"]
-
 
 }

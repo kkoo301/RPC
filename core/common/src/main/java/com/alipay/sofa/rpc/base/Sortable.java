@@ -1,4 +1,4 @@
-package com.alipay.sofa.rpc.common.base;
+package com.alipay.sofa.rpc.base;
 
 public interface Sortable {
     /**

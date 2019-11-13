@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 
 public class ReflectCacheTest {
 
-    @Test
+
     public void tesAppClassLoader() throws ExecutionException {
         URLClassLoader cl1 = new URLClassLoader(new URL[0]);
         URLClassLoader cl2 = new URLClassLoader(new URL[0]);

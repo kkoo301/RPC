@@ -100,7 +100,7 @@ public class ExtensionLoader<T> {
 
     private void loadFromClassLoader(ClassLoader classLoader, String path) throws IOException {
         Enumeration<URL> resources = classLoader.getResources(path);
-        while (null != resources && resources.hasMoreElements()) {
+        while (resources.hasMoreElements()) {
             URL resource = resources.nextElement();
             Properties properties = FileUtils.readUrl2Properties(resource, UTF_8);
             for (Object keyObj : properties.keySet()) {
@@ -238,37 +238,32 @@ public class ExtensionLoader<T> {
         ExtensionClass<T> extensionClass = allExtensions.getIfPresent(alias);
         if (null == extensionClass) {
             throw new SofaRpcRuntimeException("Not found extension of " + interfaceName + " named: \"" + alias + "\"!");
-        } else {
-            if (extensionClass.isSingleton() && null != factory) {
-                T t = factory.getIfPresent(alias);
-                if (null == t) {
-                    t = extensionClass.getExtInstance(argTypes, args);
-                    factory.put(alias, t);
-
-                }
-                return t;
-            } else {
-                return extensionClass.getExtInstance(argTypes, args);
-            }
         }
+        if (extensionClass.isSingleton() && null != factory) {
+            T t = factory.getIfPresent(alias);
+            if (null == t) {
+                t = extensionClass.getExtInstance(argTypes, args);
+                factory.put(alias, t);
+
+            }
+            return t;
+        }
+        return extensionClass.getExtInstance(argTypes, args);
     }
 
     public T getExtension(String alias) {
         ExtensionClass<T> extensionClass = allExtensions.getIfPresent(alias);
         if (null == extensionClass) {
             throw new SofaRpcRuntimeException("Not found extension of " + interfaceName + " named: \"" + alias + "\"!");
-        } else {
-            if (extensionClass.isSingleton() && null != factory) {
-                T t = factory.getIfPresent(alias);
-                if (null == t) {
-                    t = extensionClass.getExtInstance();
-                    factory.put(alias, t);
-
-                }
-                return t;
-            } else {
-                return extensionClass.getExtInstance();
-            }
         }
+        if (extensionClass.isSingleton() && null != factory) {
+            T t = factory.getIfPresent(alias);
+            if (null == t) {
+                t = extensionClass.getExtInstance();
+                factory.put(alias, t);
+            }
+            return t;
+        }
+        return extensionClass.getExtInstance();
     }
 }

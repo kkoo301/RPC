@@ -6,18 +6,17 @@ import com.alipay.sofa.rpc.ext.Extension;
 import com.alipay.sofa.rpc.invoke.Invoker;
 
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Extension("bolt")
 public class BoltServer implements Server {
 
-    ThreadPoolExecutor poolExecutor = null;
+    private ThreadPoolExecutor poolExecutor;
 
-    @Override
-    public void init(ServerConfig serverConfig) {
+    private AtomicBoolean started = new AtomicBoolean(false);
+
+    public BoltServer(ServerConfig serverConfig){
         poolExecutor = initThreadPool(serverConfig);
-
-        System.out.println(this);
-
     }
 
     private ThreadPoolExecutor initThreadPool(ServerConfig serverConfig) {
@@ -30,17 +29,8 @@ public class BoltServer implements Server {
 
     @Override
     public void start() {
-        System.out.println("start");
-    }
-
-    @Override
-    public boolean isStarted() {
-        return false;
-    }
-
-    @Override
-    public boolean hasNoEntry() {
-        return false;
+        RPCServer server = new RPCServer(8080);
+        server.start();
     }
 
     @Override
@@ -60,6 +50,12 @@ public class BoltServer implements Server {
 
     @Override
     public void destroy(DestroyHook hook) {
+
+    }
+
+
+    @Override
+    public void init() {
 
     }
 }

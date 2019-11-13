@@ -6,7 +6,6 @@ import com.alipay.sofa.rpc.common.SystemInfo;
 import com.alipay.sofa.rpc.common.utils.NetUtils;
 import com.alipay.sofa.rpc.common.utils.StringUtils;
 import com.alipay.sofa.rpc.config.ServerConfig;
-import com.alipay.sofa.rpc.ext.ExtensionLoader;
 import com.alipay.sofa.rpc.ext.ExtensionLoaderFactory;
 import com.alipay.sofa.rpc.log.Logger;
 import com.alipay.sofa.rpc.log.LoggerFactory;
@@ -30,12 +29,9 @@ public final class ServerFactory {
         Server server = SERVER_CACHE.getIfPresent(port);
         if (null == server) {
             resolveServerConfig(serverConfig);
-            ExtensionLoader<Server> extensionLoader = ExtensionLoaderFactory.getExtensionLoader(Server.class);
-            if (null == extensionLoader) {
-                throw new IllegalArgumentException("server.protocol:" + serverConfig.getProtocol() + " Unsupported protocol of server!");
-            }
-            server = extensionLoader.getExtension(serverConfig.getProtocol());
-            server.init(serverConfig);
+            server = ExtensionLoaderFactory.getExtensionLoader(Server.class)
+                    .getExtension(serverConfig.getProtocol(), new Class[]{ServerConfig.class}, new Object[]{serverConfig});
+            server.init();
             SERVER_CACHE.put(serverConfig.getPort(), server);
         }
         return server;

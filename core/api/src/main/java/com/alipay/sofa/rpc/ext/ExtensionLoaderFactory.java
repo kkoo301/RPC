@@ -22,8 +22,13 @@ public class ExtensionLoaderFactory {
     public static <T> ExtensionLoader<T> getExtensionLoader(Class<T> clazz, ExtensionLoaderListener<T> listener) {
         ExtensionLoader<T> loader = LOADER_MAP.getIfPresent(clazz);
         if (null == loader) {
-            loader = new ExtensionLoader<T>(clazz, listener);
-            LOADER_MAP.put(clazz, loader);
+            synchronized (ExtensionLoaderFactory.class){
+                loader = LOADER_MAP.getIfPresent(clazz);
+                if(null == loader){
+                    loader = new ExtensionLoader<T>(clazz, listener);
+                    LOADER_MAP.put(clazz, loader);
+                }
+            }
         }
         return loader;
     }

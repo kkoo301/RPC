@@ -17,6 +17,7 @@ public class Bootstraps {
         String bootstrap = providerConfig.getBootstrap();
         ExtensionLoader<ProviderBootstrap> extensionLoader = ExtensionLoaderFactory.getExtensionLoader(ProviderBootstrap.class);
         ProviderBootstrap extension = extensionLoader.getExtension(bootstrap, new Class[]{ProviderConfig.class}, new Object[]{providerConfig});
+        extension.init();
         return extension;
     }
 

@@ -1,6 +1,6 @@
 apply from: 'dependencyDefinitions.gradle'
 
-allprojects{
+allprojects {
     group 'com.asia'
     version '1.0'
 

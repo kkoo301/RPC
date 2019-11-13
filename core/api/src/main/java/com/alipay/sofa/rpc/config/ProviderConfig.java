@@ -15,6 +15,7 @@ public final class ProviderConfig<T> extends AbstractInterfaceConfig<T, Provider
 
     private List<ServerConfig> server;
 
+    private List<RegistryConfig> registrys;
 
     public String getBootstrap() {
         return bootstrap;
@@ -43,11 +44,20 @@ public final class ProviderConfig<T> extends AbstractInterfaceConfig<T, Provider
         return this;
     }
 
-    public ProviderConfig<T> setServer(ServerConfig serverConfig){
-        if( null == this.server){
+    public ProviderConfig<T> setServer(ServerConfig serverConfig) {
+        if (null == this.server) {
             this.server = new ArrayList<>();
         }
         server.add(serverConfig);
         return this;
+    }
+
+    public List<RegistryConfig> getRegistrys() {
+        return registrys;
+    }
+
+    public ProviderConfig setRegistrys(List<RegistryConfig> registrys) {
+        this.registrys = registrys;
+        return castThis();
     }
 }

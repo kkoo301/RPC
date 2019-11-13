@@ -1,29 +1,20 @@
 package com.alipay.sofa.rpc.bootstrap;
 
-import com.alipay.sofa.rpc.config.ProviderConfig;
+import com.alipay.sofa.rpc.base.Destroyable;
+import com.alipay.sofa.rpc.base.Initializable;
 import com.alipay.sofa.rpc.ext.Extensible;
 
 @Extensible(singleton = false)
-public abstract class ProviderBootstrap<T> {
-
-    private ProviderConfig<T> providerConfig;
-
-    public ProviderBootstrap(ProviderConfig<T> providerConfig) {
-        this.providerConfig = providerConfig;
-    }
-
-    public ProviderConfig<T> getProviderConfig() {
-        return providerConfig;
-    }
+public interface ProviderBootstrap<T> extends Destroyable, Initializable {
 
     /**
      * 发布一个服务
      */
-    abstract void export();
+    void export();
 
     /**
      * 取消发布一个服务
      */
-    abstract void unExport();
+    void unExport();
 
 }

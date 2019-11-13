@@ -7,7 +7,7 @@ import com.alipay.sofa.rpc.invoke.Invoker;
 
 public class ProviderProxyInvoker implements Invoker {
 
-    private final ProviderConfig providerConfig ;
+    private final ProviderConfig providerConfig;
 
     public <T> ProviderProxyInvoker(ProviderConfig<T> providerConfig) {
         this.providerConfig = providerConfig;

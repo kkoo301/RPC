@@ -1,6 +1,6 @@
 package com.alipay.sofa.rpc.ext;
 
-import com.alipay.sofa.rpc.common.base.Sortable;
+import com.alipay.sofa.rpc.base.Sortable;
 import com.alipay.sofa.rpc.common.utils.ClassUtils;
 import com.alipay.sofa.rpc.core.exception.SofaRpcRuntimeException;
 
