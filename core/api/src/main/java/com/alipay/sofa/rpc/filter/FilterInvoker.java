@@ -5,8 +5,8 @@ import com.alipay.sofa.rpc.core.response.SofaResponse;
 import com.alipay.sofa.rpc.invoke.Invoker;
 
 public class FilterInvoker implements Invoker {
-    @Override
-    public SofaResponse invoker(SofaRequest sofaRequest) {
-        return null;
-    }
+  @Override
+  public SofaResponse invoker(SofaRequest sofaRequest) {
+    return null;
+  }
 }

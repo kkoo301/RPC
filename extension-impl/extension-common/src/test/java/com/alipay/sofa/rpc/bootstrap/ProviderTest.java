@@ -12,37 +12,38 @@ import java.util.List;
 
 public class ProviderTest {
 
-    private String str;
+  private String str;
 
-    private int port;
+  private int port;
 
-    @Test
-    public void mainTest() {
+  @Test
+  public void mainTest() {
 
-        List<RegistryConfig> registryConfigList = new ArrayList<>();
+    List<RegistryConfig> registryConfigList = new ArrayList<>();
 
-        ServerConfig serverConfig = new ServerConfig();
-        serverConfig.setHost("loaclhost");
-        serverConfig.setPort(8080);
-        serverConfig.setProtocol("bolt");
+    ServerConfig serverConfig = new ServerConfig();
+    serverConfig.setHost("loaclhost");
+    serverConfig.setPort(8080);
+    serverConfig.setProtocol("bolt");
 
-        RegistryConfig registryConfig = new RegistryConfig().setProtocol("zookeeper").setAddress("127.0.0.1:2181");
-        registryConfigList.add(registryConfig);
+    RegistryConfig registryConfig =
+        new RegistryConfig().setProtocol("zookeeper").setAddress("127.0.0.1:2181");
+    registryConfigList.add(registryConfig);
 
-        ProviderConfig providerConfig = new ProviderConfig();
-        providerConfig.setBootstrap("sofa");
-        providerConfig.setServer(serverConfig);
-        providerConfig.setRegistrys(registryConfigList);
+    ProviderConfig providerConfig = new ProviderConfig();
+    providerConfig.setBootstrap("sofa");
+    providerConfig.setServer(serverConfig);
+    providerConfig.setRegistrys(registryConfigList);
 
-        ProviderBootstrap bootstrap = Bootstraps.from(providerConfig);
-        bootstrap.export();
-    }
+    ProviderBootstrap bootstrap = Bootstraps.from(providerConfig);
+    bootstrap.export();
+  }
 
-    @Test
-    public void addrTest() {
-        String hostAddress = new InetSocketAddress(8080).getAddress().getHostAddress();
-        System.out.println(hostAddress);
-        System.out.println(StringUtils.isBlank(str));
-        System.out.println(port);
-    }
+  @Test
+  public void addrTest() {
+    String hostAddress = new InetSocketAddress(8080).getAddress().getHostAddress();
+    System.out.println(hostAddress);
+    System.out.println(StringUtils.isBlank(str));
+    System.out.println(port);
+  }
 }

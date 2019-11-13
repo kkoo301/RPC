@@ -5,28 +5,27 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class AbstractIdConfig<S extends AbstractIdConfig> implements Serializable {
 
-    private static final AtomicInteger ID_GENERATOR = new AtomicInteger(0);
+  private static final AtomicInteger ID_GENERATOR = new AtomicInteger(0);
 
-    private String id;
+  private String id;
 
-    public String getId() {
+  public String getId() {
+    if (null == id) {
+      synchronized (this) {
         if (null == id) {
-            synchronized (this) {
-                if (null == id) {
-                    id = "rpc-cfg-" + ID_GENERATOR.getAndIncrement();
-                }
-            }
+          id = "rpc-cfg-" + ID_GENERATOR.getAndIncrement();
         }
-        return id;
+      }
     }
+    return id;
+  }
 
-    public S setId(String id) {
-        this.id = id;
-        return castThis();
-    }
+  public S setId(String id) {
+    this.id = id;
+    return castThis();
+  }
 
-    protected S castThis() {
-        return (S) this;
-    }
-
+  protected S castThis() {
+    return (S) this;
+  }
 }

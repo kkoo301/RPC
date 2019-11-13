@@ -13,25 +13,24 @@ import java.util.concurrent.ThreadFactory;
 
 public class NettyEventLoopUtil {
 
-    private static boolean epollEnabled = Epoll.isAvailable();
+  private static boolean epollEnabled = Epoll.isAvailable();
 
-    public static EventLoopGroup newEvenLoopGroup(int nThreads, ThreadFactory threadFactory) {
+  public static EventLoopGroup newEvenLoopGroup(int nThreads, ThreadFactory threadFactory) {
 
-        return epollEnabled ? new EpollEventLoopGroup(nThreads, threadFactory) : new NioEventLoopGroup(nThreads, threadFactory);
+    return epollEnabled
+        ? new EpollEventLoopGroup(nThreads, threadFactory)
+        : new NioEventLoopGroup(nThreads, threadFactory);
+  }
 
-    }
+  public static Class<? extends SocketChannel> getClientSocketChannelClass() {
+    return epollEnabled ? EpollSocketChannel.class : NioSocketChannel.class;
+  }
 
-    public static Class<? extends SocketChannel> getClientSocketChannelClass() {
-        return epollEnabled ? EpollSocketChannel.class : NioSocketChannel.class;
-    }
+  public static Class<? extends ServerSocketChannel> getServerSocketChannelClass() {
+    return epollEnabled ? EpollServerSocketChannel.class : NioServerSocketChannel.class;
+  }
 
-    public static Class<? extends ServerSocketChannel> getServerSocketChannelClass() {
-        return epollEnabled ? EpollServerSocketChannel.class : NioServerSocketChannel.class;
-    }
-
-    public static void enableTriggeredMode(ServerBootstrap serverBootstrap) {
-        if (epollEnabled) {
-
-        }
-    }
+  public static void enableTriggeredMode(ServerBootstrap serverBootstrap) {
+    if (epollEnabled) {}
+  }
 }

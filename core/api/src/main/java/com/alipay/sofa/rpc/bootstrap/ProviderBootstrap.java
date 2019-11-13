@@ -7,14 +7,9 @@ import com.alipay.sofa.rpc.ext.Extensible;
 @Extensible(singleton = false)
 public interface ProviderBootstrap<T> extends Destroyable, Initializable {
 
-    /**
-     * 发布一个服务
-     */
-    void export();
+  /** 发布一个服务 */
+  void export();
 
-    /**
-     * 取消发布一个服务
-     */
-    void unExport();
-
+  /** 取消发布一个服务 */
+  void unExport();
 }

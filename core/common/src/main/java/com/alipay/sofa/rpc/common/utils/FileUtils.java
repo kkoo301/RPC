@@ -12,41 +12,38 @@ import java.util.Properties;
 
 public class FileUtils {
 
-    /**
-     * 回车符
-     */
-    public static final String LINE_SEPARATOR = System.getProperty("line.separator");
+  /** 回车符 */
+  public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
-    public static String file2String(Class clazz, String resourcesName, Charset charset) throws IOException {
+  public static String file2String(Class clazz, String resourcesName, Charset charset)
+      throws IOException {
 
-        URL url = Resources.getResource(clazz, resourcesName);
-        List<String> lineList = Resources.readLines(url, charset);
-        StringBuilder sb = new StringBuilder();
-        for (String line : lineList) {
-            sb.append(line).append(LINE_SEPARATOR);
-        }
-        return sb.toString();
+    URL url = Resources.getResource(clazz, resourcesName);
+    List<String> lineList = Resources.readLines(url, charset);
+    StringBuilder sb = new StringBuilder();
+    for (String line : lineList) {
+      sb.append(line).append(LINE_SEPARATOR);
+    }
+    return sb.toString();
+  }
 
+  public static Properties readUrl2Properties(URL url, Charset charset) throws IOException {
+    List<String> lineList = Resources.readLines(url, charset);
+    StringBuilder sb = new StringBuilder();
+    for (String line : lineList) {
+      sb.append(line).append(LINE_SEPARATOR);
     }
 
-    public static Properties readUrl2Properties(URL url, Charset charset) throws IOException {
-        List<String> lineList = Resources.readLines(url, charset);
-        StringBuilder sb = new StringBuilder();
-        for (String line : lineList) {
-            sb.append(line).append(LINE_SEPARATOR);
-        }
-
-        Reader reader = null;
-        try {
-            reader = new StringReader(sb.toString());
-            Properties properties = new Properties();
-            properties.load(reader);
-            return properties;
-        } finally {
-            if (null != reader) {
-                reader.close();
-            }
-        }
+    Reader reader = null;
+    try {
+      reader = new StringReader(sb.toString());
+      Properties properties = new Properties();
+      properties.load(reader);
+      return properties;
+    } finally {
+      if (null != reader) {
+        reader.close();
+      }
     }
-
+  }
 }

@@ -7,31 +7,27 @@ import java.io.Serializable;
 
 public class RegistryConfig<T> extends AbstractIdConfig<RegistryConfig> implements Serializable {
 
-    /**
-     * 注册地址
-     */
-    private String address;
+  /** 注册地址 */
+  private String address;
 
-    /**
-     * 协议
-     */
-    private String protocol = RpcConfigs.getStringValue(RpcOptions.DEFAULT_PROTOCOL);
+  /** 协议 */
+  private String protocol = RpcConfigs.getStringValue(RpcOptions.DEFAULT_PROTOCOL);
 
-    public String getAddress() {
-        return address;
-    }
+  public String getAddress() {
+    return address;
+  }
 
-    public RegistryConfig setAddress(String address) {
-        this.address = address;
-        return castThis();
-    }
+  public RegistryConfig setAddress(String address) {
+    this.address = address;
+    return castThis();
+  }
 
-    public String getProtocol() {
-        return protocol;
-    }
+  public String getProtocol() {
+    return protocol;
+  }
 
-    public RegistryConfig setProtocol(String protocol) {
-        this.protocol = protocol;
-        return castThis();
-    }
+  public RegistryConfig setProtocol(String protocol) {
+    this.protocol = protocol;
+    return castThis();
+  }
 }

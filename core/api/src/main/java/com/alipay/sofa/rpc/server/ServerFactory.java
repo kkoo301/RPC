@@ -17,88 +17,96 @@ import java.util.List;
 
 public final class ServerFactory {
 
-    /**
-     * slf4j Logger for this class
-     */
-    private final static Logger LOGGER = LoggerFactory.getLogger(ServerFactory.class);
+  /** slf4j Logger for this class */
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServerFactory.class);
 
-    private final static Cache<Integer, Server> SERVER_CACHE = CacheBuilder.newBuilder().build();
+  private static final Cache<Integer, Server> SERVER_CACHE = CacheBuilder.newBuilder().build();
 
-    public static Server getServer(ServerConfig serverConfig) {
-        int port = serverConfig.getPort();
-        Server server = SERVER_CACHE.getIfPresent(port);
-        if (null == server) {
-            resolveServerConfig(serverConfig);
-            server = ExtensionLoaderFactory.getExtensionLoader(Server.class)
-                    .getExtension(serverConfig.getProtocol(), new Class[]{ServerConfig.class}, new Object[]{serverConfig});
-            server.init();
-            SERVER_CACHE.put(serverConfig.getPort(), server);
-        }
-        return server;
+  public static Server getServer(ServerConfig serverConfig) {
+    int port = serverConfig.getPort();
+    Server server = SERVER_CACHE.getIfPresent(port);
+    if (null == server) {
+      resolveServerConfig(serverConfig);
+      server =
+          ExtensionLoaderFactory.getExtensionLoader(Server.class)
+              .getExtension(
+                  serverConfig.getProtocol(),
+                  new Class[] {ServerConfig.class},
+                  new Object[] {serverConfig});
+      server.init();
+      SERVER_CACHE.put(serverConfig.getPort(), server);
+    }
+    return server;
+  }
+
+  private static void resolveServerConfig(ServerConfig serverConfig) {
+    String boundHost = serverConfig.getBoundHost();
+    if (StringUtils.isBlank(boundHost)) {
+      String host = serverConfig.getHost();
+      if (StringUtils.isBlank(host)) {
+        host = SystemInfo.getLocalHost();
+        serverConfig.setHost(host);
+        boundHost = SystemInfo.isWindows() ? host : NetUtils.ANYHOST;
+      } else {
+        boundHost = host;
+      }
+      serverConfig.setBoundHost(boundHost);
     }
 
-    private static void resolveServerConfig(ServerConfig serverConfig) {
-        String boundHost = serverConfig.getBoundHost();
-        if (StringUtils.isBlank(boundHost)) {
-            String host = serverConfig.getHost();
-            if (StringUtils.isBlank(host)) {
-                host = SystemInfo.getLocalHost();
-                serverConfig.setHost(host);
-                boundHost = SystemInfo.isWindows() ? host : NetUtils.ANYHOST;
-            } else {
-                boundHost = host;
-            }
-            serverConfig.setBoundHost(boundHost);
+    if (serverConfig.isAdaptivePort()) {
+      int oriPort = serverConfig.getPort();
+      int port =
+          NetUtils.getAvailablePort(
+              boundHost, oriPort, RpcConfigs.getIntValue(RpcOptions.SERVER_PORT_END));
+      if (port != oriPort) {
+        if (LOGGER.isWarnEnabled()) {
+          LOGGER.warn(
+              "Changed port from {} to {} because the config port is disabled", oriPort, port);
         }
-
-        if (serverConfig.isAdaptivePort()) {
-            int oriPort = serverConfig.getPort();
-            int port = NetUtils.getAvailablePort(boundHost, oriPort, RpcConfigs.getIntValue(RpcOptions.SERVER_PORT_END));
-            if (port != oriPort) {
-                if (LOGGER.isWarnEnabled()) {
-                    LOGGER.warn("Changed port from {} to {} because the config port is disabled", oriPort, port);
-                }
-                serverConfig.setPort(port);
-            }
-        }
+        serverConfig.setPort(port);
+      }
     }
+  }
 
-    public static List<Server> getAllServers() {
-        return new ArrayList<>(SERVER_CACHE.asMap().values());
+  public static List<Server> getAllServers() {
+    return new ArrayList<>(SERVER_CACHE.asMap().values());
+  }
+
+  public static void destoryAllServers() {
+    if (LOGGER.isInfoEnabled()) {
+      LOGGER.info("begin destory all server");
     }
-
-    public static void destoryAllServers() {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("begin destory all server");
+    for (Server server : getAllServers()) {
+      try {
+        server.destroy(null);
+      } catch (Exception e) {
+        if (LOGGER.isErrorEnabled()) {
+          LOGGER.error("destory server error ", e);
         }
-        for (Server server : getAllServers()) {
-            try {
-                server.destroy(null);
-            } catch (Exception e) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("destory server error ", e);
-                }
-            }
-        }
-        SERVER_CACHE.cleanUp();
+      }
     }
+    SERVER_CACHE.cleanUp();
+  }
 
-    public static void destoryServer(ServerConfig serverConfig) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("begin destory server host:{} port:{} protocol:{}", serverConfig.getHost(), serverConfig.getPort(), serverConfig.getProtocol());
-        }
-        Server server = SERVER_CACHE.getIfPresent(serverConfig.getPort());
-        if (null == server) {
-            return;
-        }
-        try {
-            server.destroy(null);
-            SERVER_CACHE.invalidate(serverConfig.getPort());
-        } catch (Exception e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("destory server error ", e);
-            }
-        }
+  public static void destoryServer(ServerConfig serverConfig) {
+    if (LOGGER.isInfoEnabled()) {
+      LOGGER.info(
+          "begin destory server host:{} port:{} protocol:{}",
+          serverConfig.getHost(),
+          serverConfig.getPort(),
+          serverConfig.getProtocol());
     }
-
+    Server server = SERVER_CACHE.getIfPresent(serverConfig.getPort());
+    if (null == server) {
+      return;
+    }
+    try {
+      server.destroy(null);
+      SERVER_CACHE.invalidate(serverConfig.getPort());
+    } catch (Exception e) {
+      if (LOGGER.isErrorEnabled()) {
+        LOGGER.error("destory server error ", e);
+      }
+    }
+  }
 }

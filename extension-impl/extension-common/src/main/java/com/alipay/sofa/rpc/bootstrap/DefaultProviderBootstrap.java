@@ -14,54 +14,48 @@ import java.util.List;
 @Extension("sofa")
 public class DefaultProviderBootstrap<T> implements ProviderBootstrap<T> {
 
-    private static ProviderConfig providerConfig;
+  private static ProviderConfig providerConfig;
 
-    public DefaultProviderBootstrap(ProviderConfig<T> providerConfig) {
-        this.providerConfig = providerConfig;
+  public DefaultProviderBootstrap(ProviderConfig<T> providerConfig) {
+    this.providerConfig = providerConfig;
+  }
+
+  @Override
+  public void export() {
+    ProviderProxyInvoker providerProxyInvoker = new ProviderProxyInvoker(providerConfig);
+
+    List<RegistryConfig> registrys = providerConfig.getRegistrys();
+    for (RegistryConfig registryConfig : registrys) {
+      RegistryFactory.getRegistry(registryConfig);
     }
 
-    @Override
-    public void export() {
-        ProviderProxyInvoker providerProxyInvoker = new ProviderProxyInvoker(providerConfig);
+    List<ServerConfig> serverConfigList = providerConfig.getServer();
+    for (ServerConfig serverConfig : serverConfigList) {
+      Server server = serverConfig.buildIfAbsent();
 
-        List<RegistryConfig> registrys = providerConfig.getRegistrys();
-        for (RegistryConfig registryConfig : registrys) {
-            RegistryFactory.getRegistry(registryConfig);
-        }
+      // Server server = ServerFactory.getServer(serverConfig);
 
-        List<ServerConfig> serverConfigList = providerConfig.getServer();
-        for (ServerConfig serverConfig : serverConfigList) {
-            Server server = serverConfig.buildIfAbsent();
-
-            //Server server = ServerFactory.getServer(serverConfig);
-
-            server.registerProcessor(providerConfig, providerProxyInvoker);
-            server.start();
-        }
-        register();
+      server.registerProcessor(providerConfig, providerProxyInvoker);
+      server.start();
     }
+    register();
+  }
 
-    private void register() {
-        List<RegistryConfig> registrys = providerConfig.getRegistrys();
-        for(RegistryConfig registryConfig : registrys){
-            Registry registry = RegistryFactory.getRegistry(registryConfig);
-            registry.start();
-            registry.register(providerConfig);
-        }
+  private void register() {
+    List<RegistryConfig> registrys = providerConfig.getRegistrys();
+    for (RegistryConfig registryConfig : registrys) {
+      Registry registry = RegistryFactory.getRegistry(registryConfig);
+      registry.start();
+      registry.register(providerConfig);
     }
+  }
 
-    @Override
-    public void unExport() {
+  @Override
+  public void unExport() {}
 
-    }
+  @Override
+  public void destroy(DestroyHook hook) {}
 
-    @Override
-    public void destroy(DestroyHook hook) {
-
-    }
-
-    @Override
-    public void init() {
-
-    }
+  @Override
+  public void init() {}
 }
