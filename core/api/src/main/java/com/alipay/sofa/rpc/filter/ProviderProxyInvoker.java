@@ -1,4 +1,4 @@
-package com.alipay.sofa.rpc.server;
+package com.alipay.sofa.rpc.filter;
 
 import com.alipay.sofa.rpc.config.ProviderConfig;
 import com.alipay.sofa.rpc.core.request.SofaRequest;

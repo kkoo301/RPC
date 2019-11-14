@@ -94,11 +94,7 @@ public class ExtensionLoader<T> {
     } catch (Exception e) {
       if (LOGGER.isErrorEnabled()) {
         LOGGER.error(
-            "Failed to load extension of extensible "
-                + interfaceName
-                + " from path:"
-                + fullFileName,
-            e);
+                "Failed to load extension of extensible {} from path:{}", interfaceClass, fullFileName, e);
       }
     }
   }
